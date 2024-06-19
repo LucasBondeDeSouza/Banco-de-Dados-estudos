@@ -38,7 +38,6 @@ let currentQuestion = {};
 app.get("/", (req, res) => {
   totalCorrect = 0;
   nextQuestion();
-  console.log(currentQuestion);
   res.render("index.ejs", { question: currentQuestion });
 });
 
@@ -63,6 +62,7 @@ app.post("/submit", (req, res) => {
 function nextQuestion() {
   const randomCountry = quiz[Math.floor(Math.random() * quiz.length)];
   currentQuestion = randomCountry;
+  console.log(randomCountry)
 }
 
 app.listen(port, () => {
