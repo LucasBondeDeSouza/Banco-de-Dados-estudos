@@ -1,0 +1,13 @@
+SELECT * FROM world_food // Retorna TODOS os dados da tabela
+
+SELECT country FROM world_food // Retorna TODOS os Países da tabela
+
+SELECT country, wheat_production FROM world_food // Retorna TODOS os Países e Produção de Trigo da tabela
+
+SELECT rice_production FROM world_food WHERE country = 'United States'; // Retorna a Produção de Trigo da Tabela que o 'País' for igual a 'United States'
+
+SELECT country FROM world_food WHERE wheat_production > 20; // Retorna os Países da tabela que a 'Produção de Trigo' for maior que 20
+
+SELECT country FROM world_food WHERE country LIKE 'U%'; // Retorna os Países da tabela que o 'País' começa com a letra 'U'
+
+SELECT country FROM world_food WHERE country LIKE '%a'; // Retorna os Países da tabela que o 'País' termina com a letra 'a'
