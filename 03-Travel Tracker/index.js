@@ -18,7 +18,7 @@ db.connect()
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
-async function checkVisisted() {
+async function checkVisited() {
   const result = await db.query("SELECT country_code FROM visited_countries")
   let countries = []
 
@@ -31,7 +31,7 @@ async function checkVisisted() {
 
 app.get("/", async (req, res) => {
   //Write your code here.
-  const countries = await checkVisisted()
+  const countries = await checkVisited()
   res.render("index.ejs", { countries: countries, total: countries.length })
 });
 
@@ -39,7 +39,9 @@ app.post("/add", async (req, res) => {
   const input = req.body['country']
 
   try {
-    const result = await db.query(`SELECT country_code FROM countries WHERE country_name = '${input}'`)
+    const result = await db.query(
+      `SELECT country_code FROM countries WHERE LOWER(country_name) LIKE '%${input.toLowerCase()}%'`
+    )
     const data = result.rows[0]
     const countryCode = data.country_code
 
@@ -48,8 +50,8 @@ app.post("/add", async (req, res) => {
       res.redirect('/')
     } catch (err) {
       console.log(err)
-      const countries = await checkVisisted()
-      
+      const countries = await checkVisited()
+
       res.render("index.ejs", {
         countries: countries,
         total: countries.length,
@@ -59,7 +61,7 @@ app.post("/add", async (req, res) => {
 
   } catch (err) {
     console.log(err)
-    const countries = await checkVisisted()
+    const countries = await checkVisited()
 
     res.render("index.ejs", {
       countries: countries,
