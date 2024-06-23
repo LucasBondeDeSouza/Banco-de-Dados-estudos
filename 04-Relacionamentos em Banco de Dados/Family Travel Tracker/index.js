@@ -1,16 +1,12 @@
 import express from "express";
 import bodyParser from "body-parser";
-import pg from 'pg'
+import { Pool } from 'pg'
 
 const app = express();
 const port = 3000;
 
-const db = new pg.Client({
-  user: 'postgres',
-  host: 'localhost',
-  database: 'Family Travel Tracker',
-  password: 'bondelucas77',
-  port: 5432
+const db = new Pool({
+  connectionString: process.env.POSTGRES_URL,
 })
 
 db.connect();
