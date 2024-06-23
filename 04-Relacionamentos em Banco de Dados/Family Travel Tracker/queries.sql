@@ -118,3 +118,18 @@ SELECT *
 FROM visited_countries
 JOIN users
 ON users.id = user_id;
+
+SELECT *
+FROM users
+ORDER BY id ASC
+// Exibir a tabela em ordem CRESCENTE de acordo com o ID
+
+SELECT *
+FROM users
+ORDER BY id DESC
+// Exibir a tabela em ordem DECRESCENTE de acordo com o ID
+
+SELECT *
+FROM users
+ORDER BY name DESC
+// Exibir a tabela em ordem CRESCENTE de acordo com o NAME
