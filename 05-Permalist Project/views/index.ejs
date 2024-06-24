@@ -17,9 +17,9 @@
         </p>
 
         <form class="edit" action="/edit" method="post">
-          <input type="hidden" name="updatedItemId" value="<%= item.id %>">
+          <input type="hidden" name="updatedItemId" value="<%= item.id %>" required>
           <input id="input<%=item.id%>" type="text" name="updatedItemTitle" value="<%= item.title %>" autocomplete="off"
-            autofocus="true" hidden="true" />
+            autofocus="true" hidden="true" required />
           <button id="done<%=item.id%>" class="edit" type="submit" hidden><img class="icon"
               src="/assets/icons/check-solid.svg" alt="tick image"></button>
         </form>
@@ -29,7 +29,7 @@
       <% } %>
 
         <form class="item" action="/add" method="post">
-          <input type="text" name="newItem" placeholder="New Item" autocomplete="off" autofocus="true" />
+          <input type="text" name="newItem" placeholder="New Item" autocomplete="off" autofocus="true" required />
           <button class="add" type="submit" name="list" value=<%=listTitle %> >+</button>
         </form>
   </div>
