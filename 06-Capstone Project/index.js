@@ -81,7 +81,6 @@ app.get("/editBook", async (req, res) => {
     try {
         const result = await db.query("SELECT * FROM books WHERE id = $1", [id])
         listEditBooks = result.rows
-        console.log(result)
 
         res.render('editBook.ejs', {
             editBook: listEditBooks
