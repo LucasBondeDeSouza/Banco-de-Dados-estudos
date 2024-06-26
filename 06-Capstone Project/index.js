@@ -19,13 +19,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
 let listBooks = []
+let listEditBooks = []
 
 app.get("/addBook", async (req, res) => {
     res.render('addBook.ejs')
-})
-
-app.get("/editBook", async (req, res) => {
-    res.render('editBook.ejs')
 })
 
 app.get("/back", async (req, res) => {
@@ -58,9 +55,49 @@ app.post("/add", async (req, res) => {
     const description = req.body.description
 
     try {
-        const result = await db.query(
+        await db.query(
             "INSERT INTO books (title, description) VALUES ($1, $2)", [title, description]
         )
+        res.redirect('/')
+    } catch (err) {
+        console.log(err)
+    }
+})
+
+app.post("/delete", async (req, res) => {
+    const id = req.body.deleteBookId
+
+    try {
+        await db.query("DELETE FROM books WHERE id = $1", [id])
+        res.redirect('/')
+    } catch (err) {
+        console.log(err)
+    }
+})
+
+app.get("/editBook", async (req, res) => {
+    const id = req.query.editBookId
+
+    try {
+        const result = await db.query("SELECT * FROM books WHERE id = $1", [id])
+        listEditBooks = result.rows
+        console.log(result)
+
+        res.render('editBook.ejs', {
+            editBook: listEditBooks
+        })
+    } catch(err) {
+        console.log(err)
+    }
+})
+
+app.post("/edit", async (req, res) => {
+    const id = req.body.bookId
+    const title = req.body.editTitle
+    const description = req.body.editDescription
+
+    try {
+        await db.query("UPDATE books SET title = ($1), description = ($2) WHERE id = $3", [title, description, id])
         res.redirect('/')
     } catch (err) {
         console.log(err)
