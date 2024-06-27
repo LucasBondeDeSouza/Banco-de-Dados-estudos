@@ -32,13 +32,14 @@ app.get("/back", async (req, res) => {
 app.get("/", async (req, res) => {
     try {
         const result = await db.query("SELECT * FROM books ORDER BY id ASC");
-
         listBooks = await Promise.all(result.rows.map(async (book) => {
             const searchBook = await axios.get(`https://openlibrary.org/search.json?title=${book.title}`);
-            const isbn = searchBook.data.docs.length > 0 ? searchBook.data.docs[0].isbn[0] : 'ISBN não encontrado';
+            const isbn = searchBook.data.docs.length > 0 ? searchBook.data.docs[0].isbn[0] : 'ISBN Not Found';
+            const author = searchBook.data.docs.length > 0 ? searchBook.data.docs[0].author_name[0]: 'Author Not Found'
             return {
                 ...book,
-                isbn: isbn
+                isbn: isbn,
+                author: author
             };
         }));
 
@@ -51,18 +52,23 @@ app.get("/", async (req, res) => {
 })
 
 app.post("/add", async (req, res) => {
-    const title = req.body.title
-    const description = req.body.description
+    const title = req.body.title;
+    const description = req.body.description;
 
     try {
-        await db.query(
-            "INSERT INTO books (title, description) VALUES ($1, $2)", [title, description]
-        )
-        res.redirect('/')
+        const searchBook = await axios.get(`https://openlibrary.org/search.json?title=${title}`);
+        if (searchBook.data.docs.length > 0) {
+            await db.query(
+                "INSERT INTO books (title, description) VALUES ($1, $2)", [title, description]
+            );
+            res.redirect('/');
+        } else {
+            res.redirect('/');
+        }
     } catch (err) {
-        console.log(err)
+        console.log(err);
     }
-})
+});
 
 app.post("/delete", async (req, res) => {
     const id = req.body.deleteBookId
@@ -96,10 +102,17 @@ app.post("/edit", async (req, res) => {
     const description = req.body.editDescription
 
     try {
-        await db.query("UPDATE books SET title = ($1), description = ($2) WHERE id = $3", [title, description, id])
-        res.redirect('/')
+        const searchBook = await axios.get(`https://openlibrary.org/search.json?title=${title}`);
+        if (searchBook.data.docs.length > 0) {
+            await db.query(
+                "UPDATE books SET title = ($1), description = ($2) WHERE id = $3", [title, description, id]
+            );
+            res.redirect('/');
+        } else {
+            res.redirect('/');
+        }
     } catch (err) {
-        console.log(err)
+        console.log(err);
     }
 })
 

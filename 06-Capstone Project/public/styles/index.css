@@ -80,12 +80,18 @@
 .card-body > .card-title {
     margin-bottom: 15px;
     display: flex;
-    align-items: center;
+    justify-content: space-between;
     gap: 10px;
 }
 
-.card-body > .card-title > h2 {
+.card-body > .card-title > .info-book > h2 {
     font-size: 26px;
+}
+
+.card-body > .card-title > .info-book > p {
+    font-weight: bold;
+    font-size: 12px;
+    color: darkcyan;
 }
 
 .card-body > .card-title > svg {
